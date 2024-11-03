@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 public class LivroDTO {
 
-    private long id;
+    private Long id;
 
     @NotNull(message = "O campo nome não pode ser nulo!")
     @NotBlank(message = "O campo nome não pode ser vazio!")
@@ -68,11 +68,11 @@ public class LivroDTO {
         this.conservacao = livro.getConservacao().getId();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

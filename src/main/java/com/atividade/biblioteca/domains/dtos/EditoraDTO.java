@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class EditoraDTO {
 
-    private int id;
+    private Integer id;
 
 
     @NotNull(message = "O campo cnpj não pode ser nulo!")
@@ -27,11 +27,11 @@ public class EditoraDTO {
         this.razaoSocial = editora.getRazaoSocial();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

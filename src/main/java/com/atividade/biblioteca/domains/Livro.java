@@ -1,6 +1,7 @@
 package com.atividade.biblioteca.domains;
 
 
+import com.atividade.biblioteca.domains.dtos.LivroDTO;
 import com.atividade.biblioteca.domains.enums.Conservacao;
 import com.atividade.biblioteca.domains.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -19,13 +20,16 @@ import java.time.LocalDate;
 public class Livro {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "seq_livro")
-    private long idLivro;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_livro")
+    private Long idLivro;
 
-    @NotBlank @NotNull
+    @NotBlank
+    @NotNull
     private String titulo;
 
-    @NotBlank @NotNull
+    @NotBlank
+    @NotNull
+    @Column(unique = true)
     private String isbn;
 
     @NotNull
@@ -41,20 +45,20 @@ public class Livro {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="idautor")
+    @JoinColumn(name = "idautor")
     private Autor autor;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="ideditora")
+    @JoinColumn(name = "ideditora")
     private Editora editora;
 
     @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name="status")
+    @JoinColumn(name = "status")
     private Status status;
 
     @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name="conservacao")
+    @JoinColumn(name = "conservacao")
     private Conservacao conservacao;
 
     public Livro() {
@@ -64,24 +68,43 @@ public class Livro {
         this.conservacao = Conservacao.EXCELENTE;
     }
 
-    public Livro(long idLivro, String titulo, String isbn, int numeroPaginas, LocalDate dataCompra, BigDecimal valorCompra, Autor autor, Editora editora, Status status, Conservacao conservacao) {
+    public Livro(Long idLivro, String titulo, String isbn, int numeroPaginas, LocalDate dataCompra, BigDecimal valorCompra, Autor autor, Editora editora, Status status, Conservacao conservacao) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.isbn = isbn;
         this.numeroPaginas = numeroPaginas;
         this.dataCompra = dataCompra;
-        this.valorCompra = valorCompra;
+        this.valorCompra = valorCompra.setScale(2, BigDecimal.ROUND_HALF_UP);
         this.autor = autor;
         this.editora = editora;
         this.status = status;
         this.conservacao = conservacao;
+
     }
 
-    public long getIdLivro() {
+    public Livro(LivroDTO dto){
+        this.idLivro = dto.getId();
+        this.titulo = dto.getTitulo();
+        this.isbn = dto.getIsbn();
+        this.numeroPaginas = dto.getNumeroPaginas();
+        this.dataCompra = dto.getDataCompra();
+        this.valorCompra = dto.getValorCompra().setScale(2,BigDecimal.ROUND_HALF_UP);
+        this.status = Status.toEnum(dto.getStatus());
+        this.conservacao = Conservacao.toEnum(dto.getConservacao());
+
+        this.autor = new Autor();
+        this.autor.setId(dto.getAutor());
+
+        this.editora = new Editora();
+        this.editora.setId(dto.getEditora());
+
+    }
+
+    public Long getIdLivro() {
         return idLivro;
     }
 
-    public void setIdLivro(long idLivro) {
+    public void setIdLivro(Long idLivro) {
         this.idLivro = idLivro;
     }
 

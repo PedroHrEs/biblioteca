@@ -1,5 +1,6 @@
 package com.atividade.biblioteca.domains;
 
+import com.atividade.biblioteca.domains.dtos.AutorDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ public class Autor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_autor")
-    private int id;
+    private Integer id;
 
     @NotNull @NotBlank
     private String nome;
@@ -26,25 +27,29 @@ public class Autor {
     private String documentoPessoal;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "Autor")
+    @OneToMany(mappedBy = "autor")
     private List<Livro> livros = new ArrayList<>();
-
 
     public Autor() {
     }
 
-    public Autor(int id, String nome, String documentoPessoal, List<Livro> livros) {
+    public Autor(Integer id, String nome, String documentoPessoal) {
         this.id = id;
         this.nome = nome;
         this.documentoPessoal = documentoPessoal;
-        this.livros = livros;
     }
 
-    public int getId() {
+    public Autor(AutorDTO dto){
+        this.id = dto.getId();
+        this.nome = dto.getNome();
+        this.documentoPessoal = dto.getDocumentoPessoal();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
