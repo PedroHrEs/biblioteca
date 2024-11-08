@@ -6,6 +6,8 @@ import com.atividade.biblioteca.domains.Autor;
 import com.atividade.biblioteca.domains.Editora;
 import com.atividade.biblioteca.domains.Livro;
 import com.atividade.biblioteca.domains.dtos.LivroDTO;
+import com.atividade.biblioteca.repositories.AutorRepository;
+import com.atividade.biblioteca.repositories.EditoraRepository;
 import com.atividade.biblioteca.repositories.LivroRepository;
 import com.atividade.biblioteca.service.exceptions.DataIntegrityViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,13 @@ public class LivroService {
 
     @Autowired
     private LivroRepository livroRepo;
+
+    @Autowired
+    private EditoraRepository editoraRepo;
+
+    @Autowired
+    private AutorRepository autorRepo;
+
 
     public List<LivroDTO> findAll() {
         //retorna uma lista de GrupoProdutoDRO
@@ -55,7 +64,7 @@ public class LivroService {
         if (!editora.isPresent()) {
             throw new DataIntegrityViolationException("Editora - " + dto.getEditora() + " não está cadastrado!");
         }
-        Optional<Autor> autor = autorRepo.findById(dto.getAutor());
+        Optional<Autor> autor = autorRepo.findById((long) dto.getAutor());
         if (!autor.isPresent()) {
             throw new DataIntegrityViolationException("Autor - " + dto.getAutor() + " não está cadastrado!");
         }
